@@ -1,0 +1,14 @@
+node_modules/
+.next/
+next-env.d.ts
+*.tsbuildinfo
+
+# Datos locales (base de datos con tus gastos y tokens de Gmail)
+data/
+*.db
+*.db-*
+
+# Secretos
+.env
+.env.local
+.env.*.local
