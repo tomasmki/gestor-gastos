@@ -228,7 +228,7 @@ function TransactionsTable({ txs }: { txs: TxWithLink[] }) {
                 <div>{tx.description}</div>
                 <div className="sub">
                   <span className="badge">{SOURCE_LABELS[tx.source]}</span>
-                  {tx.card && <span className="badge">•••• {tx.card}</span>}
+                  {tx.card && <span className="badge">{tx.card.replace(/(\d{4})$/, "•••• $1")}</span>}
                   {tx.installments && <span className="badge">{tx.installments} cuotas</span>}
                   {tx.ignored && <span className="badge">ignorado</span>}
                 </div>

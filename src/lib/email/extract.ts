@@ -67,14 +67,20 @@ export function findOnlyMoney(text: string): Money | null {
 
 /**
  * Valor de un campo tipo "Comercio: COTO" o en tabla, con la etiqueta y el valor en líneas
- * separadas ("Comercio\nCOTO"). La etiqueta tiene que estar al principio de la línea.
+ * separadas ("Comercio\nCOTO") o en la misma línea ("Comercio COTO"). La etiqueta tiene que
+ * estar al principio de la línea. Las etiquetas se prueban en el orden dado.
  */
 export function findLabeledValue(text: string, labels: string[]): string | null {
-  const m = new RegExp(
-    `(?:^|\\n)[ \\t]*(?:${alternatives(labels)})[ \\t]*(?::[ \\t]*|\\n[ \\t]*)(?:\\n[ \\t]*)?([^\\n]+)`,
-    "i",
-  ).exec(text);
-  return m ? cleanValue(m[1]) : null;
+  for (const label of labels) {
+    const separated = new RegExp(
+      `(?:^|\\n)[ \\t]*(?:${label})[ \\t]*(?::[ \\t]*|\\n[ \\t]*)(?:\\n[ \\t]*)?([^\\n]+)`,
+      "i",
+    ).exec(text);
+    const sameLine = separated ?? new RegExp(`(?:^|\\n)[ \\t]*(?:${label})[ \\t]+([^\\n:]+)(?:\\n|$)`, "i").exec(text);
+    const value = sameLine ? cleanValue(sameLine[1]) : null;
+    if (value) return value;
+  }
+  return null;
 }
 
 export function cleanValue(s: string): string | null {
@@ -93,6 +99,18 @@ export function findCardLast4(text: string): string | null {
   return m ? m[1] : null;
 }
 
+/**
+ * Tarjeta con su tipo si el mail lo dice: "la Tarjeta Santander Visa Crédito terminada en 1234"
+ * → "Visa Crédito 1234". Si no, solo los últimos 4 dígitos.
+ */
+export function findCard(text: string): string | null {
+  const named =
+    /tarjeta\s+(?:santander\s+)?([a-záéíóúü ]{2,30}?)\s+(?:terminad[ao]|finalizad[ao])\s+en\s*:?\s*(\d{4})\b/i.exec(
+      text,
+    );
+  return named ? `${named[1].trim()} ${named[2]}` : findCardLast4(text);
+}
+
 /** Fecha que acompaña a una etiqueta "Fecha" (si el mail la informa). */
 export function findLabeledDate(text: string): string | null {
   const m = /fecha\b[^\d]{0,25}?(\d{1,2}[/-]\d{1,2}[/-]\d{2,4})/i.exec(text);
@@ -100,7 +118,9 @@ export function findLabeledDate(text: string): string | null {
 }
 
 export function findInstallments(text: string): string | null {
-  const m = /(\d{1,2})\s*cuotas\b/i.exec(text) ?? /cuotas\s*:?\s*(\d{1,2})\b/i.exec(text);
+  // "Cuotas\n6" (tabla) o "Cuotas: 6"; si no, "en 6 cuotas" (en la misma línea, para no tomar
+  // los centavos de un importe de la línea anterior).
+  const m = /cuotas\s*:?\s*(\d{1,2})\b/i.exec(text) ?? /\b(\d{1,2})[ \t]*cuotas\b/i.exec(text);
   return m && Number(m[1]) > 1 ? m[1] : null;
 }
 

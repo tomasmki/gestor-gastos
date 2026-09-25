@@ -18,13 +18,13 @@ export type Category = (typeof CATEGORIES)[number];
 const RULES: [Category, RegExp][] = [
   ["Supermercado", /\b(coto|carrefour|dia|supermercado|supermercados|jumbo|disco|vea|changomas|chango mas|la anonima|walmart|makro|vital|diarco)\b/i],
   ["Comida y delivery", /\b(rappi|pedidos ?ya|mc ?donald'?s|burger king|mostaza|starbucks|havanna|cafe|resto|restaurant|parrilla|pizzeria|heladeria|cerveceria|grido|freddo)\b/i],
-  ["Transporte", /\b(uber|cabify|didi|sube|ypf|shell|axion|puma energy|peaje|ausa|autopista|estacionamiento|parking)\b/i],
+  ["Transporte", /\b(uber|cabify|didi|sube|ypf|shell|axion|puma energy|peaje|ausa|ausol|autopista|autopistas|estacionamiento|parking)\b/i],
   ["Suscripciones", /\b(netflix|spotify|disney|hbo|prime video|amazon prime|youtube|apple\.com|icloud|google \*|chatgpt|openai|anthropic|claude\.ai|paramount|crunchyroll)\b/i],
   ["Hogar y servicios", /\b(edenor|edesur|metrogas|naturgy|aysa|telecom|movistar|claro|fibertel|telecentro|flow|expensas|abl|arba|agip)\b/i],
   ["Salud", /\b(farmacia|farmacity|osde|swiss medical|galeno|omint|medicus|hospital|clinica|odontolog)/i],
   ["Compras", /\b(mercadolibre|mercado libre|falabella|fravega|garbarino|musimundo|easy|sodimac|zara|nike|adidas|dexter|amazon)\b/i],
   ["Viajes", /\b(airbnb|booking|despegar|almundo|aerolineas|flybondi|jetsmart|latam|hotel|hostel)\b/i],
-  ["Entretenimiento", /\b(cine|hoyts|cinemark|showcase|ticketek|all ?access|passline|steam|playstation|xbox|nintendo)\b/i],
+  ["Entretenimiento", /\b(cine|hoyts|cinemark|showcase|ticketek|all ?access|passline|sacoa|steam|playstation|xbox|nintendo)\b/i],
   ["Transferencias", /\b(transferencia|transferiste|enviaste dinero)\b/i],
 ];
 

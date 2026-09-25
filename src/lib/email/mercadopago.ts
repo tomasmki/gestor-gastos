@@ -2,7 +2,7 @@ import { categorize } from "../categories";
 import { toLocalDate } from "../dates";
 import {
   cleanValue,
-  findCardLast4,
+  findCard,
   findLabeledMoney,
   findLabeledValue,
   findMoneyAfter,
@@ -61,7 +61,7 @@ export const mercadopagoParser: EmailParser = {
         amountCents: money.cents,
         currency: money.currency,
         category: isTransfer ? "Transferencias" : (categorize(description) ?? "Otros"),
-        card: findCardLast4(full),
+        card: findCard(full),
         ignoredByDefault: isTransfer,
       },
     };

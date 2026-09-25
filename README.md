@@ -53,7 +53,10 @@ Los avisos por mail se configuran desde Online Banking (alertas de consumo con t
 Santander trae un **monto mínimo** para avisar (por defecto era de $150.000): bajalo lo más posible
 para que llegue un aviso por cada compra; si no, las compras chicas no van a aparecer.
 
-La app busca en Gmail con `from:santander` (se puede cambiar con `SANTANDER_GMAIL_QUERY`).
+Los avisos llegan de `Aviso Santander <mensajesyavisos@mails.santander.com.ar>` con asunto
+"Pagaste $…" y una tabla con monto, cuotas (solo crédito), comercio, fecha y hora; la app lee ese
+formato y distingue la tarjeta de crédito de la de débito. Busca en Gmail con
+`from:mensajesyavisos@mails.santander.com.ar` (se puede cambiar con `SANTANDER_GMAIL_QUERY`).
 
 ### 3. Splitwise
 
