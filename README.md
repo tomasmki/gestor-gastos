@@ -18,9 +18,13 @@ Requisitos: Node.js 22 o superior.
 
 ```bash
 npm install
-cp .env.example .env.local   # completá los valores (ver abajo)
-npm run dev                  # http://localhost:3000
+npm run setup    # te pide las credenciales (ver abajo) y crea .env.local
+npm run dev      # http://localhost:3000
 ```
+
+`npm run setup` acepta el Client ID y el secret de Google pegados, o directamente el JSON que
+descargás de Google Cloud (arrastralo a la terminal). También se puede copiar `.env.example` a
+`.env.local` y completarlo a mano.
 
 Después, en la app: **Conexiones → Conectar Gmail → Sincronizar ahora**.
 
