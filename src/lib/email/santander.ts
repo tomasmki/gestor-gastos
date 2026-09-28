@@ -51,13 +51,13 @@ export const santanderParser: EmailParser = {
       findLabeledMoney(full, AMOUNT_LABELS) ?? findMoneyAfter(full, AMOUNT_WORDS) ?? findOnlyMoney(full);
     if (!money) return failed("No encontré el importe (o había varios y no supe cuál era)");
 
+    // "compra de $ 100 en COTO", sin confundirse con "terminada en 1234".
+    const inPhrase =
+      /(?:consumo|compra|pago)[^\n]{0,60}?(?<!terminad[ao]|finalizad[ao])\sen\s+([A-Z0-9][^\n]{1,60}?)(?:\s+(?:el|con|por)\s|[.,]\s|\n|$)/i.exec(
+        full,
+      )?.[1];
     const merchant =
-      findLabeledValue(full, MERCHANT_LABELS) ??
-      cleanValue(
-        /(?:consumo|compra|pago)[^\n]{0,60}?\sen\s+([A-Z0-9][^\n]{1,60}?)(?:\s+(?:el|con|por)\s|[.,]\s|\n|$)/i.exec(
-          full,
-        )?.[1] ?? "",
-      );
+      findLabeledValue(full, MERCHANT_LABELS) ?? (inPhrase && !/^\d+$/.test(inPhrase.trim()) ? cleanValue(inPhrase) : null);
     // Sin comercio no se acepta: evita tomar como consumo otros avisos con importe
     // (pago del resumen, transferencias) y deja el mail a la vista para revisarlo.
     if (!merchant) return failed("Encontré el importe pero no el comercio: formato desconocido");

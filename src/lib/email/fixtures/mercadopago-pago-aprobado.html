@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html
+  lang="en"
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:v="urn:schemas-microsoft-com:vml"
+  xmlns:o="urn:schemas-microsoft-com:office:office"
+>
+  <head>
+    <meta charset="utf-8" />
+    <!-- utf-8 works for most cases -->
+    <meta name="viewport" content="width=device-width" />
+    <!-- Forcing initial-scale shouldn't be necessary -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <!-- Use the latest (edge) version of IE rendering engine -->
+    <meta name="x-apple-disable-message-reformatting" />
+    <!-- Disable auto-scale in iOS 10 Mail entirely -->
+    <meta
+      name="format-detection"
+      content="telephone=no,address=no,email=no,date=no,url=no"
+    />
+    <!-- Tell iOS not to automatically link certain text strings. -->
+    <meta name="color-scheme" content="light" />
+    <meta name="supported-color-schemes" content="light" />
+    <title></title>
+    <!-- The title tag shows in email notifications, like Android 4.4. -->
+    <!-- What it does: Makes background images in 72ppi Outlook render at correct size. -->
+    <!--[if gte mso 9]>
+      <xml>
+        <o:OfficeDocumentSettings>
+          <o:AllowPNG />
+          <o:PixelsPerInch>96</o:PixelsPerInch>
+        </o:OfficeDocumentSettings>
+      </xml>
+    <![endif]-->
+    <!-- Web Font / @font-face : BEGIN -->
+    <!-- NOTE: If web fonts are not required, lines 23 - 41 can be safely removed. -->
+    <!-- Desktop Outlook chokes on web font references and defaults to Times New Roman, so we force a safe fallback font. -->
+    <!--[if mso]>
+      <style>
+        * {
+          font-family: sans-serif !important;
+        }
+      </style>
+    <![endif]-->
+    <!-- All other clients get the webfont reference; some will render the font and others will silently fail to the fallbacks. More on that here: http://stylecampaign.com/blog/2015/02/webfont-support-in-email/ -->
+    <!--[if !mso]>
+      <link
+        rel="stylesheet"
+        href="https://ui.mlstatic.com/webfonts/v2.0.0-rc.1/proxima-nova/300-400-600-700.min.css"
+      />
+    <![endif]-->
+    <!-- Web Font / @font-face : END -->
+    <!-- HERE GOES ALL COMPONENTS -->
+    <style type="text/css">
+      :root {
+        color-scheme: light;
+        supported-color-schemes: light;
+      }
+      body,
+      html {
+        margin: 0 auto !important;
+        padding: 0 !important;
+        height: 100% !important;
+      }
+      * {
+        text-size-adjust: 100%;
+      }
+      div[style*="margin: 16px 0"] {
+        margin: 0 !important;
+      }
+      #MessageViewBody,
+      #MessageWebViewDiv,
+      body,
+      html {
+        width: 100% !important;
+      }
+      table,
+      td {
+        mso-table-lspace: 0 !important;
+        mso-table-rspace: 0 !important;
+      }
+      img {
+        interpolation-mode: bicubic;
+      }
+      a {
+        text-decoration: none;
+      }
+      .aBn,
+      .unstyle-auto-detected-links a,
+      a[x-apple-data-detectors] {
+        border-bottom: 0 !important;
+        cursor: default !important;
+        color: inherit !important;
+        text-decoration: none !important;
+        font-size: inherit !important;
+        font-family: inherit !important;
+        font-weight: inherit !important;
+        line-height: inherit !important;
+      }
+      .im {
+        color: inherit !important;
+      }
+      .a6S {
+        opacity: 0.01 !important;
+      }
+      .a6S,
+      img.g-img + div {
+        display: none !important;
+      }
+
+      /* iPhone-specific fixes for Gmail iOS app */
+      /* iPhone 4, 4S, 5, 5S, 5C, and 5SE */
+      @media only screen and (min-device-width: 320px) and (max-device-width: 374px) {
+        u~div .email-container {
+          min-width: 320px !important;
+        }
+      }
+
+      /* iPhone 6, 6S, 7, 8, and X */
+      @media only screen and (min-device-width: 375px) and (max-device-width: 413px) {
+        u~div .email-container {
+          min-width: 375px !important;
+        }
+      }
+
+      /* iPhone 6+, 7+, and 8+ */
+      @media only screen and (min-device-width: 414px) {
+        u~div .email-container {
+          min-width: 414px !important;
+        }
+      }
+
+      /* ANDES EMAIL CONTENT */
+      @media screen and (max-width: 480px) {
+        .andes-email-content {
+          width: 100% !important;
+          text-align: center !important;
+          margin: 0 auto !important;
+        }
+        
+        /* Mobile table fixes */
+        table {
+          table-layout: fixed !important;
+        }
+
+        table table table {
+          table-layout: auto;
+        }
+        
+        /* Exception for payment status grid */
+        .payment-status-grid {
+          table-layout: auto !important;
+        }
+        
+        /* Hide elements on mobile */
+        .hidden-mobile {
+          display: none !important;
+        }
+      }
+
+      @media screen and (max-width: 622px) {
+        .andes-email-td-mobile {
+          display: block;
+          padding: 0 !important;
+          width: 100%;
+        }
+        .andes-email-td-mobile--align-center {
+          text-align: center !important;
+        }
+        .andes-email-td-mobile--align-left {
+          text-align: left !important;
+        }
+        .andes-email-td-mobile--align-right {
+          text-align: right !important;
+        }
+        
+        /* Mobile styles for email container */
+        .email-container {
+          width: 100% !important;
+          max-width: 100% !important;
+          background-color: #f5f5f5;
+        }
+        
+        .andes-email-content {
+          max-width: 100% !important;
+        }
+        
+
+        
+        /* Mobile styles for main container */
+        .email-main-container {
+          width: 100% !important;
+          padding: 0 !important;
+        }
+      }
+      
+      /* Desktop styles */
+      @media screen and (min-width: 623px) {
+        .email-main-container {
+          padding: 0 !important;
+        }
+        
+        .email-container {
+          max-width: 520px !important;
+        }
+        
+        .andes-email-content {
+          max-width: 580px !important;
+        }
+      }
+    </style>
+    <style type="text/css">
+      @media screen and (max-width: 480px) {
+  .logo__column {
+    padding-top: 20px !important;
+    padding-bottom: 24px !important;
+  }
+}
+@media screen and (max-width: 480px) {
+  .image {
+    height: auto !important;
+    transition: all 0.6s ease !important;
+  }
+}
+.hidden-desktop {
+  display: none !important;
+}
+
+.footer-container {
+  padding-bottom: 40px;
+}
+
+.andes-body-m {
+  line-height: 20px;
+}
+
+.andes-body-s {
+  line-height: 18px;
+}
+
+.andes-title-s {
+  line-height: 25px;
+}
+
+.card-header {
+  padding: 25px 40px !important;
+}
+
+.img {
+  display: block;
+}
+
+.text-right {
+  text-align: right;
+}
+
+/* Default fallback for email clients that don't support media queries - Desktop first */
+.truncate-desktop {
+  display: inline-block !important;
+}
+
+.truncate-mobile {
+  display: none !important;
+}
+
+/* Accessibility utilities - SCREEN_READER_ONLY is now handled via inline styles */
+/* Mobile-first approach for better email client compatibility */
+@media screen and (max-width: 600px) {
+  .card-responsive {
+    padding: 24px !important;
+  }
+  .hidden-mobile {
+    display: none !important;
+  }
+  .hidden-desktop {
+    display: block !important;
+  }
+  .footer-container {
+    padding-bottom: 24px;
+  }
+  /* Responsive spacing classes for mobile - compatible with email clients */
+  .responsive-padding {
+    padding: 24px !important;
+  }
+  .responsive-space-mobile-24-desktop-40 {
+    padding-top: 24px !important;
+  }
+  .responsive-space-mobile-24-desktop-16 {
+    padding-top: 24px !important;
+  }
+  .responsive-space-mobile-16-desktop-24 {
+    padding-top: 16px !important;
+  }
+  .responsive-space-mobile-16-desktop-40 {
+    padding-top: 16px !important;
+  }
+  .responsive-space-mobile-8-desktop-16 {
+    padding-top: 8px !important;
+  }
+  .responsive-space-mobile-0-desktop-8 {
+    padding-top: 0px !important;
+  }
+  .responsive-email-content-padding {
+    padding: 16px !important;
+  }
+  .responsive-space-mobile-12-desktop-10 {
+    padding-top: 12px !important;
+  }
+  .responsive-padding-left-mobile-24-desktop-40 {
+    padding-left: 24px !important;
+  }
+  .responsive-padding-left-rejected-mobile-15-desktop-40 {
+    padding-left: 15px !important;
+  }
+  .responsive-image-size-mobile-64-desktop-80 {
+    width: 64px !important;
+    height: 64px !important;
+  }
+  .responsive-title-base {
+    width: 180px !important;
+  }
+  .ellipsis-title-s {
+    width: 200px !important;
+  }
+  .ellipsis-body-s {
+    width: 200px !important;
+  }
+  .ellipsis-body-s-responsive {
+    width: 200px !important;
+  }
+  .email-content-responsive-padding {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+  /* Responsive title mobile - removed webkit properties that don't work in emails */
+  /* Truncate title classes - simplified since Go template handles truncation */
+  .truncate-title-medium {
+    word-wrap: break-word !important;
+    overflow-wrap: break-word !important;
+  }
+  /* Email-compatible truncation classes for mobile */
+  .truncate-desktop {
+    display: none !important;
+  }
+  .truncate-mobile {
+    display: inline-block !important;
+  }
+  /* Rejected title: force wrapping only on mobile */
+  .rejected-title-responsive {
+    width: 180px !important; /* Mobile: force second line */
+  }
+  /* Rejected ellipsis: shorter truncation on mobile */
+  .rejected-ellipsis-responsive {
+    width: 190px !important; /* Mobile: truncate with slightly more space */
+  }
+  /* Alineación vertical para filas en mobile */
+  .andes-row {
+    align-items: flex-start !important;
+  }
+  /* Columnas de valores alineadas arriba en mobile */
+  .mobile-value-column {
+    vertical-align: top !important;
+    align-self: flex-start !important;
+  }
+  /* Forzar alineación de Grid en mobile */
+  .andes-grid .andes-row {
+    align-items: flex-start !important;
+    vertical-align: top !important;
+  }
+}
+@media screen and (min-width: 601px) {
+  .truncate-title-short,
+  .truncate-title-medium,
+  .truncate-title-long {
+    white-space: nowrap !important;
+    text-overflow: ellipsis !important;
+    max-height: none !important;
+  }
+  .truncate-title-short {
+    max-width: 350px !important;
+  }
+  .truncate-title-medium {
+    max-width: 400px !important;
+  }
+  .truncate-title-long {
+    max-width: 450px !important;
+  }
+  /* Email-compatible truncation classes for desktop */
+  .truncate-desktop {
+    display: inline-block !important;
+  }
+  .truncate-mobile {
+    display: none !important;
+  }
+  /* Rejected title: keep full width on desktop */
+  .rejected-title-responsive {
+    width: 300px !important; /* Desktop: single line */
+  }
+  /* Rejected ellipsis: full width on desktop */
+  .rejected-ellipsis-responsive {
+    width: 280px !important; /* Desktop: show more characters */
+  }
+  /* Responsive spacing classes for desktop - compatible with email clients */
+  .responsive-padding {
+    padding: 40px !important;
+  }
+  .responsive-space-mobile-24-desktop-40 {
+    padding-top: 40px !important;
+  }
+  .responsive-space-mobile-24-desktop-16 {
+    padding-top: 16px !important;
+  }
+  .responsive-space-mobile-16-desktop-24 {
+    padding-top: 24px !important;
+  }
+  .responsive-space-mobile-16-desktop-40 {
+    padding-top: 40px !important;
+  }
+  .responsive-space-mobile-8-desktop-16 {
+    padding-top: 16px !important;
+  }
+  .responsive-space-mobile-0-desktop-8 {
+    padding-top: 8px !important;
+  }
+  .responsive-email-content-padding {
+    padding: 60px !important;
+  }
+  .responsive-space-mobile-12-desktop-10 {
+    padding-top: 10px !important;
+  }
+  .responsive-padding-left-mobile-24-desktop-40 {
+    padding-left: 40px !important;
+  }
+  .responsive-padding-left-rejected-mobile-15-desktop-40 {
+    padding-left: 40px !important;
+  }
+  .responsive-image-size-mobile-64-desktop-80 {
+    width: 80px !important;
+    height: 80px !important;
+  }
+  .responsive-title-base {
+    width: 300px !important;
+  }
+  .ellipsis-title-s {
+    width: 300px !important;
+  }
+  .ellipsis-body-s {
+    width: 300px !important;
+  }
+  .ellipsis-body-s-responsive {
+    width: 300px !important;
+  }
+  .email-content-responsive-padding {
+    padding-left: 60px !important;
+    padding-right: 60px !important;
+  }
+}
+    </style>
+  </head>
+  <body
+    width="100%"
+    style="
+      margin: 0;
+      padding: 0 !important;
+      mso-line-height-rule: exactly;
+      background-color: #ffffff;
+    "
+  >
+    <center
+      role="article"
+      aria-roledescription="email"
+      lang="en"
+      class="email-main-container"
+      style="margin: 0 auto;"
+    >
+      <!--[if mso | IE]>
+    <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #f5f5f5;">
+    <tr>
+    <td>
+    <![endif]-->
+      <!-- Visually Hidden Preheader Text : BEGIN -->
+      <div
+        style="max-height: 0; overflow: hidden; display: none"
+        aria-hidden="true"
+      >
+        <!-- HERE GOES FIRST LINE -->
+      </div>
+      <!-- Visually Hidden Preheader Text : END -->
+      <!-- Create white space after the desired preview text so email clients don’t pull other distracting text into the inbox preview. Extend as necessary. -->
+      <!-- Preview Text Spacing Hack : BEGIN -->
+      <div
+        style="
+          display: none;
+          font-size: 1px;
+          line-height: 1px;
+          max-height: 0;
+          max-width: 0;
+          opacity: 0;
+          overflow: hidden;
+          font-family: sans-serif;
+        "
+      >
+        
+      </div>
+      <!-- Preview Text Spacing Hack : END -->
+      <div style="margin: 0 auto;" class="email-container">
+        <!--[if mso]>
+      <table align="center" role="presentation" cellspacing="0" cellpadding="0" border="0" width="640">
+      <tr>
+      <td>
+      <![endif]-->
+        <!-- Email Body : BEGIN -->
+        <table
+          border="0"
+          cellpadding="0"
+          cellspacing="0"
+          width="100%"
+          align="center"
+          class="andes-email-content"
+          style="background-color: #f5f5f5; width: 100%; max-width: 100%;"
+        >
+          <tbody>
+            <tr>
+              <td
+                align="center"
+                class="andes-email-content-td email-content-responsive-padding"
+                style="padding-left: 60px; padding-right: 60px;"
+              >
+                <!--[if mso]><table border="0" cellSpacing="0" cellPadding="0" align="center" width="520"><tr><td align="center" valign="top" width="520"><![endif]-->
+                <header><!-- --><table role="presentation" cellSpacing="0" cellPadding="0" border="0" style="width:100%"><tbody><tr style="width:100%"><td><!-- --><!-- --><!-- --><span role="img" aria-label="Logo de Mercado Pago"><span aria-hidden="true"><table role="presentation" cellSpacing="0" cellPadding="0" border="0" width="100%"><tbody><tr><td valign="middle" align="left" class="logo__td" style="padding-top:24px;padding-bottom:20px"><table role="presentation" cellSpacing="0" cellPadding="0" border="0" class="image" width="124" height="32" align="left"><tbody><tr><td align="center"><a target="_blank" rel="noopener noreferrer" href="https://www.mercadopago.com.ar/" title="Ir a Mercado pago"><img src="https://http2.mlstatic.com/storage/mercurio-frontend/campaign-images/andes-emails/logo-mercadopago.png" width="124" height="32" alt="Ir a Mercado pago" border="0" style="display:block;width:100%;margin:auto" class="g-img"/></a></td></tr></tbody></table></td></tr></tbody></table></span></span><!-- --><!-- --><!-- --><!-- --></td><td style="text-align:end"><table role="presentation" cellSpacing="0" cellPadding="0" border="0" width="100%"><tbody><tr><td><span style="font-family:&quot;Proxima Nova&quot;, -apple-system, &quot;Helvetica Neue&quot;, Helvetica, &quot;Roboto&quot;, Arial, sans-serif;font-weight:400;margin:0;padding:0;font-size:14px;color:#737373"><span style="display:inline-block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:20ch">Hola,<!-- --> <!-- -->JUAN</span></span></td></tr></tbody></table></td></tr></tbody></table></header><main role="main"><table role="presentation" cellSpacing="0" cellPadding="0" border="0" width="100%" style="width:100%;background:#fff;overflow:hidden;margin:0 auto;border-radius:6px;border-right-width:1px;border-top-width:1px;border-bottom-width:2px;border-left-width:0;border-style:solid;border-color:#e5e5e5"><tbody><tr><td><table role="presentation" cellSpacing="0" cellPadding="0" border="0" width="100%"><tbody><tr><td style="padding:24px 40px;border-left:4px solid #00A650" class="card-responsive"><table role="presentation" cellSpacing="0" cellPadding="0" border="0" width="100%" class="payment-status-grid"><tbody><tr><td width="80%" align="left" role="heading" aria-level="1"><span style="font-family:&quot;Proxima Nova&quot;, -apple-system, &quot;Helvetica Neue&quot;, Helvetica, &quot;Roboto&quot;, Arial, sans-serif;font-weight:400;margin:0;padding:0;font-size:14px;color:#1a1a1a"><span style="display:inline-block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;width:300px;line-height:18px" class="truncate-desktop">Le compraste a<!-- --> <!-- -->COMERCIO EJEMPLO</span><span style="display:inline-block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;width:200px;line-height:18px" class="truncate-mobile">Le compraste a<!-- --> <!-- -->COMERCIO EJEMPLO</span></span><table role="presentation" cellSpacing="0" cellPadding="0" border="0" width="100%"><tbody><tr><td style="padding-bottom:0;padding-top:4px"></td></tr></tbody></table><span style="font-family:&quot;Proxima Nova&quot;, -apple-system, &quot;Helvetica Neue&quot;, Helvetica, &quot;Roboto&quot;, Arial, sans-serif;font-weight:600;margin:0;padding:0;font-size:20px;color:#1a1a1a" class="andes-title-s">Tu pago fue aprobado</span></td><td width="20%" align="right" style="padding-left:40px" aria-hidden="true" class="responsive-padding-left-mobile-24-desktop-40"><table role="presentation" cellSpacing="0" cellPadding="0" border="0" width="80px"><tbody><tr><td><table cellPadding="0" cellSpacing="0" border="0" style="width:80px;height:80px"><tr><td width="100%" height="100%" style="background-image:url(https://mla-s1-p.mlstatic.com/000000-MLA00000000000_000000-O.jpg);background-size:contain;background-position:center;border-radius:50%;background-repeat:no-repeat;width:80px;height:80px"><img src="https://http2.mlstatic.com/storage/pog-cm-admin/calm-assets/FrameImageEmails--b635c570.png" alt="circle frame" width="100%" height="100%" style="display:block;width:80px;height:80px"/></td></tr></table></td></tr></tbody></table><!-- --></td></tr></tbody></table></td></tr></tbody></table></td></tr></tbody></table><table role="presentation" cellSpacing="0" cellPadding="0" border="0" width="100%"><tbody><tr><td style="padding-bottom:0;padding-top:16px"></td></tr></tbody></table><table role="presentation" cellSpacing="0" cellPadding="0" border="0" width="100%" style="width:100%;background:#fff;overflow:hidden;margin:0 auto;border-radius:6px;border-right-width:1px;border-top-width:1px;border-bottom-width:2px;border-left-width:1px;border-style:solid;border-color:#e5e5e5"><tbody><tr><td><table role="presentation" cellSpacing="0" cellPadding="0" border="0" width="100%"><tbody><tr><td style="padding:40px" class="card-responsive"><table role="presentation" cellSpacing="0" cellPadding="0" border="0" width="100%"><tbody><tr><td><h1 style="font-family:&quot;Proxima Nova&quot;, -apple-system, &quot;Helvetica Neue&quot;, Helvetica, &quot;Roboto&quot;, Arial, sans-serif;font-weight:600;margin:0;padding:0;font-size:18px;color:#1a1a1a" aria-label="Pagaste 28500 pesos"><span aria-hidden="true" style="text-decoration:none;white-space:nowrap;margin:0">Pagaste<!-- --> <!-- -->$ 28.500</span></h1></td></tr></tbody></table><table role="presentation" cellSpacing="0" cellPadding="0" border="0" width="100%"><tbody><tr><td style="padding-bottom:0;padding-top:10px"></td></tr></tbody></table><table role="group" cellSpacing="0" cellPadding="0" border="0" width="100%" style="padding:14px 0" tabindex="0" aria-label="Dinero disponible, , "><tbody><td width="40" align="left" valign="top" aria-hidden="true"><img width="40" height="40" class="img" src="https://http2.mlstatic.com/storage/pog-cm-admin/calm-assets/PaymentMethod-AccountMoneyYellow2--8401841f.png"/></td><td align="left" style="padding-left:16px" aria-hidden="true"><table role="presentation" cellSpacing="0" cellPadding="0" border="0" width="100%" class="image"><tbody><tr><td align="left" valign="middle"><table role="presentation" cellSpacing="0" cellPadding="0" border="0" width="100%"><tbody><tr><td><span style="font-family:&quot;Proxima Nova&quot;, -apple-system, &quot;Helvetica Neue&quot;, Helvetica, &quot;Roboto&quot;, Arial, sans-serif;font-weight:400;margin:0;padding:0;font-size:16px;color:#1a1a1a" class="andes-body-m">Dinero disponible</span></td></tr></tbody></table></td></tr><tr><td align="left" valign="middle"><table role="presentation" cellSpacing="0" cellPadding="0" border="0" width="100%"><tbody><tr><td><span style="font-family:&quot;Proxima Nova&quot;, -apple-system, &quot;Helvetica Neue&quot;, Helvetica, &quot;Roboto&quot;, Arial, sans-serif;font-weight:400;margin:0;padding:0;font-size:14px;color:#737373" class="andes-body-s"><span style="color:#00A650;white-space:nowrap"></span></span></td></tr></tbody></table></td></tr></tbody></table></td></tbody></table><!-- --><table role="presentation" cellSpacing="0" cellPadding="0" border="0" width="100%"><tbody><tr><td style="padding-bottom:0;padding-top:24px"></td></tr></tbody></table><!-- --><table role="presentation" cellSpacing="0" cellPadding="0" border="0" width="100%"><tbody><tr><td><span style="font-family:&quot;Proxima Nova&quot;, -apple-system, &quot;Helvetica Neue&quot;, Helvetica, &quot;Roboto&quot;, Arial, sans-serif;font-weight:400;margin:0;padding:0;font-size:14px;color:#737373">Si necesitás más información de tu pago,<!-- --> <a style="font-family:&quot;Proxima Nova&quot;, -apple-system, &quot;Helvetica Neue&quot;, Helvetica, &quot;Roboto&quot;, Arial, sans-serif;font-weight:400;margin:0;padding:0;font-size:14px;color:#3483fa" href="https://www.mercadopago.com.ar/activities?q=100000000001" target="_blank"><span style="text-decoration:none">consultá el detalle de operación</span></a><span aria-hidden="true">.</span></span></td></tr></tbody></table><!-- --></td></tr></tbody></table></td></tr></tbody></table><table role="presentation" cellSpacing="0" cellPadding="0" border="0" width="100%"><tbody><tr><td style="padding-bottom:0;padding-top:40px"></td></tr></tbody></table><!-- --><!-- --><table role="presentation" cellSpacing="0" cellPadding="0" border="0" width="100%"><tbody><tr><td><span style="font-family:&quot;Proxima Nova&quot;, -apple-system, &quot;Helvetica Neue&quot;, Helvetica, &quot;Roboto&quot;, Arial, sans-serif;font-weight:400;margin:0;padding:0;font-size:12px;color:#737373">Pago procesado por Mercado Pago.</span></td></tr></tbody></table><table role="presentation" cellSpacing="0" cellPadding="0" border="0" width="100%"><tbody><tr><td><span style="font-family:&quot;Proxima Nova&quot;, -apple-system, &quot;Helvetica Neue&quot;, Helvetica, &quot;Roboto&quot;, Arial, sans-serif;font-weight:400;margin:0;padding:0;font-size:12px;color:#737373">¿Tenés dudas?<!-- --> <a style="font-family:&quot;Proxima Nova&quot;, -apple-system, &quot;Helvetica Neue&quot;, Helvetica, &quot;Roboto&quot;, Arial, sans-serif;font-weight:400;margin:0;padding:0;font-size:12px;color:#3483fa" href="https://www.mercadopago.com.ar/ayuda" target="_blank">Consultá nuestro centro de ayuda</a><span aria-hidden="true">.</span></span></td></tr></tbody></table></main><table role="presentation" cellSpacing="0" cellPadding="0" border="0" width="100%"><tbody><tr><td style="padding-bottom:0;padding-top:40px"></td></tr></tbody></table>
+                <!--[if mso]></td></tr></table><![endif]-->
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <!-- Email Body : END -->
+        <!--[if mso]>
+      </td>
+      </tr>
+      </table>
+      <![endif]-->
+      </div>
+      <!--[if mso | IE]>
+    </td>
+    </tr>
+    </table>
+    <![endif]-->
+    </center>
+  <img alt="" src="https://b57690dl.r.us-east-1.awstrack.me/I0/000000" style="display: none; width: 1px; height: 1px;">
+</body>
+</html>
+<table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="width: 100%; max-width: 520px; margin: 0px auto;"><tbody><tr><td valign="middle" align="left" style="width: 100%; max-width: 520px; padding-top: 40px; padding-bottom: 40px;"><table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%"><tbody><tr><td valign="middle" align="left"><table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%"><tbody><tr><td><p style="font-family: 'Proxima Nova', -apple-system, 'Helvetica Neue', Helvetica, Roboto, Arial, sans-serif; font-weight: 400; font-size: 12px; color: rgba(0, 0, 0, 0.45); margin: 0px;">Te enviamos este correo porque el e-mail usuario@example.com está asociado a una cuenta de Mercado Pago.</p><p style="font-family: 'Proxima Nova', -apple-system, 'Helvetica Neue', Helvetica, Roboto, Arial, sans-serif; font-weight: 400; font-size: 12px; color: rgba(0, 0, 0, 0.45); margin: 0px;"><a href="https://www.mercadopago.com.ar/communication-preferences" style="font-family: 'Proxima Nova', -apple-system, 'Helvetica Neue', Helvetica, Roboto, Arial, sans-serif; font-weight: 400; color: rgb(52, 131, 250); text-decoration: none;">Configurá tus notificaciones de e-mail</a> para elegir qué correos querés recibir.</p><p style="font-family: 'Proxima Nova', -apple-system, 'Helvetica Neue', Helvetica, Roboto, Arial, sans-serif; font-weight: 400; font-size: 12px; color: rgba(0, 0, 0, 0.45); margin: 0px;">Conocé <a href="https://www.mercadopago.com.ar/privacidad" style="font-family: 'Proxima Nova', -apple-system, 'Helvetica Neue', Helvetica, Roboto, Arial, sans-serif; font-weight: 400; color: rgb(52, 131, 250); text-decoration: none;">cómo cuidamos tu Privacidad</a> y visitá los <a href="https://www.mercadopago.com.ar/ayuda/terminos-y-condiciones_299" style="font-family: 'Proxima Nova', -apple-system, 'Helvetica Neue', Helvetica, Roboto, Arial, sans-serif; font-weight: 400; color: rgb(52, 131, 250); text-decoration: none;">Términos y Condiciones de Mercado Pago</a>.</p></td></tr></tbody></table></td></tr></tbody></table></td></tr></tbody></table>

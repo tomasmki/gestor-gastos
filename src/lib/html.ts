@@ -42,6 +42,7 @@ export function decodeEntities(s: string): string {
 export function htmlToText(html: string): string {
   return decodeEntities(
     html
+      .replace(/\r\n?/g, "\n") // los mails vienen con saltos de línea CRLF
       .replace(/<(style|script|head)\b[\s\S]*?<\/\1>/gi, " ")
       .replace(/<!--[\s\S]*?-->/g, " ")
       .replace(/<br\s*\/?>/gi, "\n")

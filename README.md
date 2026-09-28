@@ -73,8 +73,9 @@ una deuda) no se cuentan porque no son consumo.
 Mercado Pago no ofrece una API para ver los pagos que hacés **como usuario** (sus APIs y reportes
 están pensados para vendedores que cobran). Por eso hay dos caminos, combinables:
 
-- **Mails (automático)**: si Mercado Pago te manda un mail por cada pago/transferencia, se leen al
-  sincronizar Gmail (búsqueda `from:mercadopago`, configurable con `MERCADOPAGO_GMAIL_QUERY`).
+- **Mails (automático)**: los mails de pago de Mercado Pago (`info@mercadopago.com`, asunto
+  "Pago aprobado en COMERCIO") se leen al sincronizar Gmail, incluido el medio de pago ("Dinero
+  disponible" o la tarjeta). Búsqueda `from:mercadopago`, configurable con `MERCADOPAGO_GMAIL_QUERY`.
   Las transferencias a personas se importan **ignoradas**, porque muchas veces son para saldar
   deudas (que ya cuenta Splitwise); podés tocar "Contar" si alguna era un gasto (p. ej. el alquiler).
 - **CSV (manual)**: exportá la actividad desde la web de Mercado Pago e importala en
@@ -107,8 +108,9 @@ parsers (`src/lib/email/santander.ts` y `src/lib/email/mercadopago.ts`) son heur
 importe, el comercio y la tarjeta en varias formas posibles. Los mails que parecen gastos pero no
 se pudieron interpretar aparecen en **Conexiones → Mails sin procesar**, con el texto completo.
 
-Para mejorar un parser: copiá el texto de uno de esos mails (tapando datos sensibles) como caso de
-test en `src/lib/email/parsers.test.ts`, ajustá el parser hasta que pase y tocá **Reprocesar mails
+Para mejorar un parser: en Gmail, menú ⋮ del mail → **Descargar mensaje** (un `.eml`). Guardá su
+HTML, con los datos personales reemplazados, en `src/lib/email/fixtures/` y sumá un caso en
+`src/lib/email/real-emails.test.ts`. Ajustá el parser hasta que pase y tocá **Reprocesar mails
 guardados** (vuelve a leer los mails ya descargados, sin pedirlos de nuevo a Gmail).
 
 ## Privacidad y seguridad

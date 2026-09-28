@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS transactions (
   paid_cents    INTEGER,                   -- Splitwise: cuánto pagaste vos
   total_cents   INTEGER,                   -- Splitwise: costo total del gasto
   category      TEXT,
-  card          TEXT,                      -- tarjeta: "Visa Crédito 1234" o solo los últimos 4 dígitos
+  card          TEXT,                      -- medio de pago: "Visa Crédito 1234", "Dinero disponible", "1234"
   installments  TEXT,                      -- cuotas, si el mail las informa
   linked_to     TEXT REFERENCES transactions(id) ON DELETE SET NULL,
   link_locked   INTEGER NOT NULL DEFAULT 0, -- 1 = no volver a vincular automáticamente
