@@ -2,7 +2,15 @@ import { describe, expect, it } from "vitest";
 import { openDb } from "./db";
 import { applyAutoLinks, findLinks } from "./matching";
 import { mapExpense, type SplitwiseExpense } from "./splitwise";
-import { getAllTransactions, isCounted, summarize, unlink, upsertTransaction, type Tx } from "./transactions";
+import {
+  getAllTransactions,
+  isCounted,
+  listMonth,
+  summarize,
+  unlink,
+  upsertTransaction,
+  type Tx,
+} from "./transactions";
 
 const tx = (partial: Partial<Tx> & Pick<Tx, "id" | "source" | "amountCents">): Tx => ({
   date: "2026-09-10",
@@ -119,7 +127,7 @@ describe("totales con la base de datos", () => {
     });
 
     expect(applyAutoLinks(db)).toBe(1);
-    expect(summarize(getAllTransactions(db)).totals).toEqual([{ currency: "ARS", cents: 1000000 }]);
+    expect(summarize(listMonth(db, "2026-09")).totals).toEqual([{ currency: "ARS", cents: 1000000 }]);
 
     unlink(db, "santander:1");
     expect(applyAutoLinks(db)).toBe(0); // no se vuelve a vincular solo

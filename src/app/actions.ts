@@ -100,6 +100,7 @@ export async function addManualAction(form: FormData) {
   const description = field(form, "description");
   const currency = field(form, "currency") === "USD" ? "USD" : "ARS";
   const category = field(form, "category");
+  const installments = Number(field(form, "installments") || "1");
   if (!date || !amountCents || amountCents <= 0 || !description) return;
   const db = getDb();
   addManual(db, {
@@ -108,6 +109,7 @@ export async function addManualAction(form: FormData) {
     amountCents,
     currency,
     category: (CATEGORIES as readonly string[]).includes(category) ? category : "Otros",
+    installments: Number.isInteger(installments) && installments > 1 ? String(installments) : null,
   });
   applyAutoLinks(db);
   refresh();

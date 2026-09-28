@@ -101,6 +101,20 @@ El vínculo se hace solo cuando coinciden moneda, importe (±1%) y fecha (±5 d�
 ±3 con Mercado Pago). Si alguno está mal, tocá **Desvincular**; también podés **Ignorar** cualquier
 movimiento para que no sume.
 
+## Compras en cuotas
+
+Una compra en cuotas no suma entera en el mes en que la hacés: **cada mes suma la cuota que le
+toca**, empezando por el mes de la compra (cuota 1) y siguiendo mes a mes. Por ejemplo, $99.000 en
+6 cuotas comprados en septiembre suman $16.500 de septiembre a febrero.
+
+- El monto del aviso de Santander se toma como el **total** de la compra y se divide en partes
+  iguales (los centavos que sobran van en la primera cuota).
+- En cada mes, las cuotas de compras de meses anteriores aparecen en su propia sección, y arriba se
+  muestra cuánto te queda por pagar en cuotas.
+- Si un pago en cuotas está vinculado a otro movimiento (por ejemplo, lo cargaste en Splitwise), ese
+  movimiento también se reparte en las mismas cuotas.
+- Al cargar un gasto a mano podés indicar la cantidad de cuotas.
+
 ## Ajustar la lectura de mails
 
 El formato exacto de los mails de Santander y Mercado Pago no está documentado, así que los

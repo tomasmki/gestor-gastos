@@ -1,6 +1,7 @@
 import { randomUUID } from "node:crypto";
 import { addMonths } from "./dates";
 import type { DB } from "./db";
+import { entriesForMonth, MAX_INSTALLMENTS, remainingAfter, type WithMonth } from "./installments";
 
 export type Source = "santander" | "mercadopago" | "splitwise" | "csv" | "manual";
 
@@ -141,7 +142,10 @@ export function getAllTransactions(db: DB): Tx[] {
   return (db.prepare("SELECT * FROM transactions ORDER BY date, id").all() as TxRow[]).map(fromRow);
 }
 
-export function listMonth(db: DB, month: string): TxWithLink[] {
+export type MonthEntry = WithMonth<TxWithLink>;
+
+/** Movimientos con fecha entre `fromMonth` y `toMonth` (ambos incluidos), más recientes primero. */
+function loadMonths(db: DB, fromMonth: string, toMonth: string): TxWithLink[] {
   const rows = db
     .prepare(
       `SELECT t.*, l.description AS linked_description, l.source AS linked_source
@@ -150,7 +154,7 @@ export function listMonth(db: DB, month: string): TxWithLink[] {
        WHERE t.date >= ? AND t.date < ?
        ORDER BY t.date DESC, t.created_at DESC`,
     )
-    .all(`${month}-01`, `${addMonths(month, 1)}-01`) as (TxRow & {
+    .all(`${fromMonth}-01`, `${addMonths(toMonth, 1)}-01`) as (TxRow & {
     linked_description: string | null;
     linked_source: Source | null;
   })[];
@@ -161,23 +165,28 @@ export function listMonth(db: DB, month: string): TxWithLink[] {
   }));
 }
 
+/** Lo que aporta al mes: sus movimientos y las cuotas de compras anteriores que caen en él. */
+export function listMonth(db: DB, month: string): MonthEntry[] {
+  return entriesForMonth(loadMonths(db, addMonths(month, -(MAX_INSTALLMENTS - 1)), month), month);
+}
+
 export interface Summary {
   totals: { currency: string; cents: number }[];
   byCategory: { currency: string; category: string; cents: number }[];
   bySource: { currency: string; source: Source; cents: number }[];
 }
 
-export function summarize(txs: Tx[]): Summary {
+export function summarize(entries: WithMonth<Tx>[]): Summary {
   const totals = new Map<string, number>();
   const byCategory = new Map<string, number>();
   const bySource = new Map<string, number>();
   const add = (m: Map<string, number>, k: string, v: number) => m.set(k, (m.get(k) ?? 0) + v);
 
-  for (const tx of txs) {
-    if (!isCounted(tx) || tx.amountCents === 0) continue;
-    add(totals, tx.currency, tx.amountCents);
-    add(byCategory, `${tx.currency}|${tx.category ?? "Otros"}`, tx.amountCents);
-    add(bySource, `${tx.currency}|${tx.source}`, tx.amountCents);
+  for (const tx of entries) {
+    if (!isCounted(tx) || tx.monthCents === 0) continue;
+    add(totals, tx.currency, tx.monthCents);
+    add(byCategory, `${tx.currency}|${tx.category ?? "Otros"}`, tx.monthCents);
+    add(bySource, `${tx.currency}|${tx.source}`, tx.monthCents);
   }
 
   const split = (k: string) => k.split("|") as [string, string];
@@ -193,17 +202,41 @@ export function summarize(txs: Tx[]): Summary {
   };
 }
 
-/** Total contado por mes y moneda desde `fromMonth` (inclusive). */
-export function monthlyTotals(db: DB, fromMonth: string): { month: string; currency: string; cents: number }[] {
-  return db
-    .prepare(
-      `SELECT substr(date, 1, 7) AS month, currency, SUM(amount_cents) AS cents
-       FROM transactions
-       WHERE ignored = 0 AND linked_to IS NULL AND date >= ?
-       GROUP BY month, currency
-       ORDER BY month`,
-    )
-    .all(`${fromMonth}-01`) as { month: string; currency: string; cents: number }[];
+/** Total contado por mes y moneda entre `fromMonth` y `toMonth` (ambos incluidos), cuotas incluidas. */
+export function monthlyTotals(
+  db: DB,
+  fromMonth: string,
+  toMonth: string,
+): { month: string; currency: string; cents: number }[] {
+  const txs = loadMonths(db, addMonths(fromMonth, -(MAX_INSTALLMENTS - 1)), toMonth);
+  const out: { month: string; currency: string; cents: number }[] = [];
+  for (let month = fromMonth; month <= toMonth; month = addMonths(month, 1)) {
+    for (const { currency, cents } of summarize(entriesForMonth(txs, month)).totals) {
+      out.push({ month, currency, cents });
+    }
+  }
+  return out;
+}
+
+export interface InstallmentStats {
+  /** Cuotas de compras de meses anteriores que suman en este mes. */
+  fromPrevious: { currency: string; cents: number }[];
+  /** Lo que queda por pagar en cuotas después de este mes. */
+  pending: { currency: string; cents: number }[];
+}
+
+export function installmentStats(entries: MonthEntry[], month: string): InstallmentStats {
+  const fromPrevious = new Map<string, number>();
+  const pending = new Map<string, number>();
+  const add = (m: Map<string, number>, k: string, v: number) => m.set(k, (m.get(k) ?? 0) + v);
+  for (const e of entries) {
+    if (!e.installment || !isCounted(e)) continue;
+    if (e.date < `${month}-01`) add(fromPrevious, e.currency, e.monthCents);
+    add(pending, e.currency, remainingAfter(e.amountCents, e.installment.of, e.installment.n));
+  }
+  const toList = (m: Map<string, number>) =>
+    [...m].filter(([, cents]) => cents !== 0).map(([currency, cents]) => ({ currency, cents }));
+  return { fromPrevious: toList(fromPrevious), pending: toList(pending) };
 }
 
 export function setIgnored(db: DB, id: string, ignored: boolean): void {
@@ -229,7 +262,14 @@ export function unlink(db: DB, id: string): void {
 
 export function addManual(
   db: DB,
-  input: { date: string; description: string; amountCents: number; currency: string; category: string },
+  input: {
+    date: string;
+    description: string;
+    amountCents: number;
+    currency: string;
+    category: string;
+    installments: string | null;
+  },
 ): void {
   upsertTransaction(db, { id: `manual:${randomUUID()}`, source: "manual", ...input });
 }

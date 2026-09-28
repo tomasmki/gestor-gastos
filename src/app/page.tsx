@@ -4,12 +4,13 @@ import { addMonths, currentMonth, formatMonth, toLocalDate } from "@/lib/dates";
 import { getDb } from "@/lib/db";
 import { formatMoney } from "@/lib/money";
 import {
+  installmentStats,
   isCounted,
   listMonth,
   monthlyTotals,
   SOURCE_LABELS,
   summarize,
-  type TxWithLink,
+  type MonthEntry,
 } from "@/lib/transactions";
 import { addManualAction, deleteAction, toggleIgnoredAction, unlinkAction } from "./actions";
 import { CategorySelect, SubmitButton } from "./components";
@@ -26,17 +27,23 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ m
   const { mes } = await searchParams;
   const month = mes && /^\d{4}-\d{2}$/.test(mes) ? mes : currentMonth();
   const db = getDb();
-  const txs = listMonth(db, month);
-  const summary = summarize(txs);
-  const hasAnyData = txs.length > 0 || (db.prepare("SELECT 1 FROM transactions LIMIT 1").get() ?? null) !== null;
+  const entries = listMonth(db, month);
+  // Compras del mes (incluye la 1ª cuota de lo comprado en cuotas) y cuotas de compras anteriores.
+  const txs = entries.filter((e) => e.date.startsWith(month));
+  const previousInstallments = entries.filter((e) => !e.date.startsWith(month) && isCounted(e));
+  const summary = summarize(entries);
+  const installments = installmentStats(entries, month);
+  const hasAnyData = entries.length > 0 || (db.prepare("SELECT 1 FROM transactions LIMIT 1").get() ?? null) !== null;
 
   const ars = summary.totals.find((t) => t.currency === "ARS")?.cents ?? 0;
   const otherTotals = summary.totals.filter((t) => t.currency !== "ARS");
   const arsCategories = summary.byCategory.filter((c) => c.currency === "ARS");
   const arsSources = summary.bySource.filter((s) => s.currency === "ARS");
+  const arsFromPrevious = installments.fromPrevious.find((t) => t.currency === "ARS")?.cents ?? 0;
+  const arsPending = installments.pending.find((t) => t.currency === "ARS")?.cents ?? 0;
 
   const firstMonth = addMonths(month, -(HISTORY_MONTHS - 1));
-  const historyRows = monthlyTotals(db, firstMonth).filter((r) => r.currency === "ARS" && r.month <= month);
+  const historyRows = monthlyTotals(db, firstMonth, month).filter((r) => r.currency === "ARS");
   const history = Array.from({ length: HISTORY_MONTHS }, (_, i) => {
     const m = addMonths(firstMonth, i);
     return { month: m, cents: historyRows.find((r) => r.month === m)?.cents ?? 0 };
@@ -70,6 +77,12 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ m
               + {formatMoney(t.cents, t.currency)}
             </div>
           ))}
+          {(arsFromPrevious > 0 || arsPending > 0) && (
+            <div className="secondary small" style={{ marginTop: 8 }}>
+              {arsFromPrevious > 0 && <div>Incluye {formatMoney(arsFromPrevious, "ARS")} de cuotas de compras anteriores</div>}
+              {arsPending > 0 && <div>Te quedan {formatMoney(arsPending, "ARS")} en cuotas para los próximos meses</div>}
+            </div>
+          )}
           {arsSources.length > 0 && (
             <div className="tiles">
               {arsSources.map((s) => (
@@ -108,9 +121,21 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ m
         {txs.length === 0 ? (
           <p className="muted">No hay movimientos en este mes.</p>
         ) : (
-          <TransactionsTable txs={txs} />
+          <TransactionsTable entries={txs} />
         )}
       </section>
+
+      {previousInstallments.length > 0 && (
+        <section className="card">
+          <div className="spread">
+            <h2>Cuotas de compras anteriores</h2>
+            {arsFromPrevious > 0 && (
+              <span className="muted small">{formatMoney(arsFromPrevious, "ARS")} este mes</span>
+            )}
+          </div>
+          <TransactionsTable entries={previousInstallments} showYear />
+        </section>
+      )}
 
       <section className="card">
         <details>
@@ -144,6 +169,10 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ m
                   <option key={c}>{c}</option>
                 ))}
               </select>
+            </label>
+            <label>
+              Cuotas
+              <input type="number" name="installments" min={1} max={48} defaultValue={1} style={{ width: 70 }} />
             </label>
             <SubmitButton className="primary" pendingText="Guardando…">
               Agregar
@@ -207,7 +236,7 @@ function CategoryBars({ rows, total }: { rows: { category: string; cents: number
   );
 }
 
-function TransactionsTable({ txs }: { txs: TxWithLink[] }) {
+function TransactionsTable({ entries: txs, showYear = false }: { entries: MonthEntry[]; showYear?: boolean }) {
   return (
     <div className="table-wrap">
       <table>
@@ -223,15 +252,27 @@ function TransactionsTable({ txs }: { txs: TxWithLink[] }) {
         <tbody>
           {txs.map((tx) => (
             <tr key={tx.id} className={isCounted(tx) ? "" : "not-counted"}>
-              <td style={{ whiteSpace: "nowrap" }}>{tx.date.slice(8, 10)}/{tx.date.slice(5, 7)}</td>
+              <td style={{ whiteSpace: "nowrap" }}>
+                {tx.date.slice(8, 10)}/{tx.date.slice(5, 7)}
+                {showYear && `/${tx.date.slice(2, 4)}`}
+              </td>
               <td>
                 <div>{tx.description}</div>
                 <div className="sub">
                   <span className="badge">{SOURCE_LABELS[tx.source]}</span>
                   {tx.card && <span className="badge">{tx.card.replace(/(\d{4})$/, "•••• $1")}</span>}
-                  {tx.installments && <span className="badge">{tx.installments} cuotas</span>}
+                  {tx.installment && (
+                    <span className="badge">
+                      Cuota {tx.installment.n}/{tx.installment.of}
+                    </span>
+                  )}
                   {tx.ignored && <span className="badge">ignorado</span>}
                 </div>
+                {tx.installment && (
+                  <div className="sub">
+                    Total {formatMoney(tx.amountCents, tx.currency)} en {tx.installment.of} cuotas
+                  </div>
+                )}
                 {tx.linkedTo && (
                   <div className="sub">
                     Ya contado en {tx.linkedSource ? SOURCE_LABELS[tx.linkedSource] : "otro movimiento"}:{" "}
@@ -249,7 +290,7 @@ function TransactionsTable({ txs }: { txs: TxWithLink[] }) {
                 <CategorySelect id={tx.id} value={tx.category} />
               </td>
               <td className="amount">
-                <span className="value">{formatMoney(tx.amountCents, tx.currency)}</span>
+                <span className="value">{formatMoney(tx.monthCents, tx.currency)}</span>
               </td>
               <td>
                 <div className="actions">
